@@ -183,8 +183,7 @@ You must create your own components using basic HTML, JSX, and Bootstrap
 	 only return records from the api that have values in the `filterType` field
 	 that match the keyword, and a "Search" button to fire the search event off.
 2. When there are no records to display, the page will show the message
-   `No Records To Display` under the Search button. When there are records to
-	 display, it will display the message 
+   `No Records To Display` under the Search button. When there are records to display, it will display the message 
 	 `Displaying [number of records returned from search] Records`
 
 	 So if the search returns 217 records, the message would say

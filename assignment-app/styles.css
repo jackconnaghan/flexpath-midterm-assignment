@@ -1,0 +1,13 @@
+.funky-text {
+    text-align:"center";
+    color: "red";
+}
+/* THis is SOOOooOO silly */
+.extend-under-navbar {
+    padding-top: 60px;
+}
+
+.custom-lead {
+    margin: 22px 22px 22px 10px;
+    text-align:"right";
+}

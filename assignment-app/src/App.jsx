@@ -1,13 +1,31 @@
 import React from "react";
+import { Route, Routes, Link } from "react-router-dom";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import SearchResults from "./pages/Search";
+//import Search from "./components/SearchComponent";
+import NavBar from "./components/NavBar";
+import PageNotFound from "./pages/PageNotFound";
+import SearchResultPractice from "./components/SearchResultsPractice";
 
 function App() {
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        {/* <p> tag is a placeholder, You'll need to change the tag/component type later*/}
-        <p className="navbar-brand ms-4 nav-link">User Behavior Data</p>
-      </nav>
-      <hr />
+      <NavBar />
+      <br></br>
+      <div>
+        <Routes>
+          {/* Even though some links live exclusively in the NavBar
+        component, all <Routes> are instantiated in the 
+          App.jsx file to ensure high-level compatibility. */}
+          <Route class="User Behavior Data" path="/" element={<Home />} />
+          <Route class="Search Page" path="/search" element={<SearchResults />} />
+          <Route class="Page Not Found" path="/*?" element={<PageNotFound />} />
+          <Route id="Search Result Practice" path="/searchpractice" element={<SearchResultPractice />} />
+        </Routes>
+        <Footer />
+      </div>
     </div>
   );
 }
