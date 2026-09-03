@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import { useParams } from "react-router-dom";
+import kOnzy from "/./public/kOnzy.gif"
 
 export default function SearchResultPractice() {
 
@@ -73,8 +74,15 @@ export default function SearchResultPractice() {
                     }></input>
                 <button type="submit">Submit</button>
             </form>
-            <br></br>
-            {(loading) && <h2>Loading...</h2>}
+            {(loading) && 
+                <div style={{display:"flex"}}>
+                    <h2>Loading...</h2>
+                    <div style={{position:"relative"}}>
+                        <img src={kOnzy} className="gif-load"></img>
+                    </div>
+                </div>}
+            {(!loading & response.length > 0) 
+                && <h2>Showing {response.length} results</h2>}
             {(response.length <= 0)
                 ? <h2>No data to display</h2>
                 : <></>

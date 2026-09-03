@@ -11,3 +11,10 @@
     margin: 22px 22px 22px 10px;
     text-align:"right";
 }
+
+.gif-load {
+    margin: 2px;
+    height: 30px;
+    display: "inline-block";
+    position: "absolute";
+}
