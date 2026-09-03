@@ -7,70 +7,22 @@ import { useParams } from "react-router-dom";
 export default function SearchResultPractice() {
 
     const [input, setInput] = useState("");
-    //const [submitValue, setSubmitValue] = useState("");
     const [loading, setLoading] = useState(false);
-    const [mockResponse, setMockResponse] = useState([]);
-    const [advancedMockResponse, setAdvancedMockResponse] = useState({
-        data: [],
-        //loading: false,
-        error: "",
-    });
-    // let baseUrl = `/api/data/search`;
-
-
-    // useEffect(() => {
-
-    //     async function fetchData() {
-    //     //this fetch call hardcodes the filterType and keyword
-    //     //it will always return the same API endpoint with the 
-    //     //same params
-    //     let response = await fetch(`api/data/search?filterType=gender&keyword=${input}`);
-    //     let responseData = await response.json();
-    //     setMockResponse(responseData.toArray);
-    //     console.log(responseData);
-    //     setAdvancedMockResponse({
-    //         data: responseData,
-    //         //loading: response.loading
-    //         error: response.error,
-    //     });
-    //     };
-
-    //     fetchData();
-    // }, [submitValue]);
+    const [response, setResponse] = useState([]);
 
     function handleSubmit(e) {
         e.preventDefault();
-        // let internalInput = input;
-        // console.log(`submitValue before setLoading(true): ${submitValue}`);
-        // console.log(`internalInput: ${internalInput}`);
-        // setLoading(true);
-        // console.log(`submitValue before setSubmitValue(input): ${submitValue}`);
-        // console.log(`input before setSubmitValue(input): ${input}`)
-        // setSubmitValue(internalInput);
-        // console.log(`submitValue after setSubmitValue(internalInput)(""): ${submitValue}`);
-        // //setInput("");
-        // // let url = new URL(baseUrl);
-        // let url = `api/data/search/?filterType=gender&keyword=${submitValue}`;
+        const keyword = input.trim();
+        const searchParams = new URLSearchParams({
+            filterType: "operatingsystem",
+            keyword,
+        });
 
         setLoading(true);
-        //let internalInput = input;
-        //setInput("");
-        //setSubmitValue(input);
 
-        //I've been trying to figure out why my search is not 
-        // returning a filtered array based on the keyword.
-        // I've turned to the encodeURIComponent hoping it will help.
-        // It seems to accomplish the same thing as inline brackets
-        const url = `/api/data/search?filterType=gender&keyword=${input}`;
+        const url = `/api/data/search?${searchParams.toString()}`;
 
-        // url.searchParams.append("filterType", "gender");
-        // url.searchParams.append("keyword", input);
         async function fetchData() {
-            //this fetch call hardcodes the filterType and keyword
-            //it will always return the same API endpoint with the 
-            //same params
-            //let url = `api/data/search?filterType=gender&keyword=${submitValue}`;
-            //let url = `api/data/search?filterType=gender&keyword=`;
             try {
                 console.log(url);
                 let response = await fetch(url);
@@ -80,14 +32,11 @@ export default function SearchResultPractice() {
                 console.log(response.ok);
                 console.log(response);
                 let responseData = await response.json();
-                setMockResponse(responseData);
-                console.log(`mockResponse length: ${mockResponse.length}`);
-                console.log(`mockResponse: ${mockResponse}`);
-                setAdvancedMockResponse({
-                    data: responseData,
-                    //loading: response.loading
-                    error: response.error,
-                });
+                
+                setResponse(responseData);
+                console.log(responseData);
+                //responseData.map(datum => {console.log(datum)});
+                console.log(`response length: ${responseData.length}`);
             } catch (error) {
                 console.error(`Fetch error: ${error}`);
             } finally {
@@ -97,19 +46,17 @@ export default function SearchResultPractice() {
         };
 
         fetchData();
-        console.log(`Keyword sent as param: ${input}`);
+        console.log(`Keyword sent as param: ${keyword}`);
         setInput("");
-
-
-        //setSubmitValue("");
-        //console.log(`input at end of handleSubmit: ${input}`);
-
-
+        
     }
     return (
         <div className="container extend-under-navbar">
             <h1>Practice the Search Function</h1>
             <p>This page tests a default call to the api</p>
+            <p>The filterType is hardcoded as "operatingsystem", 
+                so try using keywords like "android".
+            </p>
             <form onSubmit={(e) => {
                 handleSubmit(e);
             }
@@ -127,10 +74,8 @@ export default function SearchResultPractice() {
             {(loading === true)
                 ? <h3>Loading...</h3>
                 : <></>}
-            {(mockResponse)
-                ? <p>Here's that mock data you ordered: {mockResponse.Array}</p>
-                : <p>Mock Data not Return! Take Day Off!</p>
-            }
+            
+            
             <br></br>
             <h2>Advanced Output</h2>
             <table className="table">
@@ -149,16 +94,26 @@ export default function SearchResultPractice() {
                         <th scope="col">User Behavior Class</th>
                     </tr>
                 </thead>
-                {/* <tbody>
-                    {(advancedMockResponse)
-                        ? advancedMockResponse.data?.map((line, index) => (
-                            <tr key={index}>
-                                 <td key={line}>{line}</td>
+                <tbody>
+                    {(response)
+                        ? response.map(item => (
+                            <tr key={item["User ID"]}>
+                                 <td>{item["User ID"]}</td>
+                                 <td>{item["Device Model"]}</td>
+                                 <td>{item["Operating System"]}</td>
+                                 <td>{item["App Usage Time (min/day)"]}</td>
+                                 <td>{item["Screen On Time (hours/day)"]}</td>
+                                 <td>{item["Battery Drain (mAh/day)"]}</td>
+                                 <td>{item["Number of Apps Installed"]}</td>
+                                 <td>{item["Data Usage (MB/day)"]}</td>
+                                 <td>{item["Age"]}</td>
+                                 <td>{item["Gender"]}</td>
+                                 <td>{item["User Behavior Class"]}</td>
                             </tr> 
                             ))
                         : <p>No data to display</p>
                     }
-                </tbody> */}
+                </tbody>
             </table>
         </div>
 
