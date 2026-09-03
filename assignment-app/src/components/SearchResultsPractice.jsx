@@ -45,9 +45,12 @@ export default function SearchResultPractice() {
 
         };
 
-        fetchData();
+        //simulate loading time
+        setTimeout(() => {
+            fetchData();
         console.log(`Keyword sent as param: ${keyword}`);
         setInput("");
+        }, 1500);
 
     }
     return (
@@ -71,6 +74,7 @@ export default function SearchResultPractice() {
                 <button type="submit">Submit</button>
             </form>
             <br></br>
+            {(loading) && <h2>Loading...</h2>}
             {(response.length <= 0)
                 ? <h2>No data to display</h2>
                 : <></>
