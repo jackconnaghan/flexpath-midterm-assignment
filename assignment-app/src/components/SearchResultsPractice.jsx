@@ -32,7 +32,7 @@ export default function SearchResultPractice() {
                 console.log(response.ok);
                 console.log(response);
                 let responseData = await response.json();
-                
+
                 setResponse(responseData);
                 console.log(responseData);
                 //responseData.map(datum => {console.log(datum)});
@@ -48,13 +48,13 @@ export default function SearchResultPractice() {
         fetchData();
         console.log(`Keyword sent as param: ${keyword}`);
         setInput("");
-        
+
     }
     return (
         <div className="container extend-under-navbar">
             <h1>Practice the Search Function</h1>
             <p>This page tests a default call to the api</p>
-            <p>The filterType is hardcoded as "operatingsystem", 
+            <p>The filterType is hardcoded as "operatingsystem",
                 so try using keywords like "android".
             </p>
             <form onSubmit={(e) => {
@@ -70,14 +70,11 @@ export default function SearchResultPractice() {
                     }></input>
                 <button type="submit">Submit</button>
             </form>
-            <h2>Basic Output</h2>
-            {(loading === true)
-                ? <h3>Loading...</h3>
-                : <></>}
-            
-            
             <br></br>
-            <h2>Advanced Output</h2>
+            {(response.length <= 0)
+                ? <h2>No data to display</h2>
+                : <></>
+            }
             <table className="table">
                 <thead>
                     <tr>
@@ -95,24 +92,23 @@ export default function SearchResultPractice() {
                     </tr>
                 </thead>
                 <tbody>
-                    {(response)
-                        ? response.map(item => (
+                    {(response.length > 0) && (
+                        response.map(item => (
                             <tr key={item["User ID"]}>
-                                 <td>{item["User ID"]}</td>
-                                 <td>{item["Device Model"]}</td>
-                                 <td>{item["Operating System"]}</td>
-                                 <td>{item["App Usage Time (min/day)"]}</td>
-                                 <td>{item["Screen On Time (hours/day)"]}</td>
-                                 <td>{item["Battery Drain (mAh/day)"]}</td>
-                                 <td>{item["Number of Apps Installed"]}</td>
-                                 <td>{item["Data Usage (MB/day)"]}</td>
-                                 <td>{item["Age"]}</td>
-                                 <td>{item["Gender"]}</td>
-                                 <td>{item["User Behavior Class"]}</td>
-                            </tr> 
-                            ))
-                        : <p>No data to display</p>
-                    }
+                                <td>{item["User ID"]}</td>
+                                <td>{item["Device Model"]}</td>
+                                <td>{item["Operating System"]}</td>
+                                <td>{item["App Usage Time (min/day)"]}</td>
+                                <td>{item["Screen On Time (hours/day)"]}</td>
+                                <td>{item["Battery Drain (mAh/day)"]}</td>
+                                <td>{item["Number of Apps Installed"]}</td>
+                                <td>{item["Data Usage (MB/day)"]}</td>
+                                <td>{item["Age"]}</td>
+                                <td>{item["Gender"]}</td>
+                                <td>{item["User Behavior Class"]}</td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </table>
         </div>
