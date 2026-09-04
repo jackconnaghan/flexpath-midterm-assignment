@@ -4,10 +4,10 @@ import useFetch from "../hooks/useFetch";
 export default function SearchMetricCardsComponent({ response, loading }) {
 
     const dataAreas = [
-        "App Usage Time (min/day)",
-        "Screen On Time (hours/day)",
-        "Number of Apps Installed",
-        "Age",
+        ["App Usage Time (min/day)", "min/day"],
+        ["Screen On Time (hours/day)", "hrs/day"],
+        ["Number of Apps Installed", ""],
+        ["Age", ""]
     ];
     //keeping these simple math functions local for ease of use;
     //don't want to build external "math" hook that would also be
@@ -54,15 +54,15 @@ export default function SearchMetricCardsComponent({ response, loading }) {
                 <div className="col-2 mx-1 py-3 border position-relative" key={index}>
                     <div type="card" >
                         <div className="card-title border position-sticky top-25 start-25 my-2">
-                            <h4 className="flex-column" style={{ textAlign: "center" }}>{option}</h4>
+                            <h4 className="flex-column" style={{ textAlign: "center" }}>{option[0]}</h4>
                         </div>
                         <div className="card-body border position-sticky bottom-0 start-0 end-0">
                             {
                                 (response?.length > 0)
                                     ? (
                                         <>
-                                            <p className="card-text" style={{ textAlign: "center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage(option))}</p>
-                                            <p className="card-text" style={{ textAlign: "center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian(option))}</p>
+                                            <p className="card-text" style={{ textAlign: "center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage(option[0]))} {option[1]}</p>
+                                            <p className="card-text" style={{ textAlign: "center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian(option[0]))} {option[1]}</p>
                                         </>
                                     ) : <p className="card-text" style={{ textAlign: "center" }}>No Average or Media to display</p>
                             }
