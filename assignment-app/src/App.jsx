@@ -9,6 +9,7 @@ import NavBar from "./components/NavBar";
 import PageNotFound from "./pages/PageNotFound";
 import SearchComponent from "./components/SearchComponent";
 import { CacheProvider } from "./contexts/CacheResultsContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
 
@@ -17,20 +18,22 @@ function App() {
   return (
     <CacheProvider value={cache}>
       <div>
-      <NavBar />
-      <br></br>
-      <div>
-        <Routes>
-          {/* Even though some links live exclusively in the NavBar
+        <ErrorBoundary>
+          <NavBar />
+        </ErrorBoundary>
+        <br></br>
+        <div>
+          <Routes>
+            {/* Even though some links live exclusively in the NavBar
         component, all <Routes> are instantiated in the 
           App.jsx file to ensure high-level compatibility. */}
-          <Route class="User Behavior Data" path="/" element={<Home />} />
-          <Route class="Search Page" path="/search" element={<SearchResults />} />
-          <Route class="Page Not Found" path="/*?" element={<PageNotFound />} />
-        </Routes>
-        <Footer />
+            <Route class="User Behavior Data" path="/" element={<Home />} />
+            <Route class="Search Page" path="/search" element={<SearchResults />} />
+            <Route class="Page Not Found" path="/*?" element={<PageNotFound />} />
+          </Routes>
+          <Footer />
+        </div>
       </div>
-    </div>
     </CacheProvider>
   );
 }

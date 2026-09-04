@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import kOnzy from "/kOnzy.gif";
-import doggy from "/doggy.jpeg"
+import scaredyDog from "/scaredyDog.jpeg"
 import { useCache } from "../contexts/CacheResultsContext";
 import useFetch from "../hooks/useFetch";
 
@@ -101,12 +101,33 @@ export default function SearchComponent() {
         setResponse(cache);
     }, [])
 
+    // The following is some silliness to enable a fun easter egg 
+    // (and reach the "exceeding expectations" tier of the project grade).
+    // handleDragStart is called when the image, which is only displayed
+    // with a certain text input, is dragged.
+
+    // e.dataTransfer.setData takes two params:
+    // (dataFormat, attributeName). It sets the DragData object 
+    // to a "text/plain" type attribute and sets that "text/plain" type 
+    // attribute to the target HTML section's alt text.
+    const handleDragStart = (e) => {
+        e.dataTransfer.setData("text/plain", e.target.alt)
+    }
+    //This function once again prevents default before
+    // creating a new variable "droppedAltText" which runs the getData 
+    // function on the dataTransfer object of e. This places the 
+    // value of dataTransfer's attribute "text/plain" in droppedAltText.
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setFilterTypeValue("model");
+        setInput(e.dataTransfer.getData('text/plain'));
+    }
     //return component layout
     return (
-        <div className="container-md">
-            <div className="container-md row" id="hold-search-and-doggy">
-                <div className="col"><h1 className="display-4 container-fluid">Search Through The Database</h1>
-
+        <div className="container m-0">
+            <div className="row m-4" id="hold-search-and-doggy">
+                <h1 className="display-4 p-0">Search Through The Database</h1>
+                <div className="col-8">
                     <form onSubmit={(e) => {
                         handleSubmit(e);
                     }}>
@@ -130,7 +151,13 @@ export default function SearchComponent() {
                             onChange={(e) => {
                                 setInput(e.target.value)
                             }
-                            }></input>
+
+                            }
+                            onDrop={(e) => {
+                                //handleInputValueClear;
+                                handleDrop(e);
+                            }}></input>
+                            <br></br>
                         <button type="submit" className="btn btn-outline-secondary">Submit</button>
                     </form>
                     <br></br>
@@ -153,8 +180,17 @@ export default function SearchComponent() {
                     <br></br>
                 </div>
                 {/* The className must include d-flex in order to justify content */}
-                <div className="col d-flex justify-content-end">
-                    <img src={doggy} className="img-thumbnail" style={{ height: 400 }}></img>
+                <div className="col-4 d-flex img-fluid justify-content-end w-25 border border-primary">
+                    <img src={scaredyDog} className="img-thumbnail" style={{ objectFit: "cover", aspectRatio: 1, height: 300 }}
+                        draggable="true"
+                        alt="Pupper Phone 31"
+                        onDragStart={handleDragStart}
+                        onDrop={() => {
+                            //handleInputValueClear;
+                            handleDrop();
+                            setFilterTypeValue("model");
+                            console.log(filterTypeValue);
+                        }}></img>
                 </div>
 
             </div>

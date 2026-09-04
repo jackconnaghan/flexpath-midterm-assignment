@@ -9101,41 +9101,41 @@
   },
   {
     "User ID": "701",
-    "Device Model": "Poop Phone 14",
+    "Device Model": "Pupper Phone 31",
     "Operating System": "iOP",
     "App Usage Time (min/day)": "144",
     "Screen On Time (hours/day)": "5.4",
     "Battery Drain (mAh/day)": "1306",
     "Number of Apps Installed": "49",
     "Data Usage (MB/day)": "828",
-    "Age": "23",
+    "Age": "4",
     "Gender": "Female",
-    "User Behavior Class": "3"
+    "User Behavior Class": "2"
   },
   {
     "User ID": "702",
-    "Device Model": "Poop Phone 14",
-    "Operating System": "Android",
+    "Device Model": "Pupper Phone 31",
+    "Operating System": "iOP",
     "App Usage Time (min/day)": "515",
     "Screen On Time (hours/day)": "5.4",
-    "Battery Drain (mAh/day)": "1306",
-    "Number of Apps Installed": "49",
-    "Data Usage (MB/day)": "828",
+    "Battery Drain (mAh/day)": "90",
+    "Number of Apps Installed": "1",
+    "Data Usage (MB/day)": "414",
     "Age": "23",
     "Gender": "Female",
     "User Behavior Class": "3"
   },
   {
     "User ID": "703",
-    "Device Model": "Poop Phone 14",
-    "Operating System": "Android",
+    "Device Model": "Pupper Phone 31",
+    "Operating System": "iOP",
     "App Usage Time (min/day)": "111",
     "Screen On Time (hours/day)": "5.4",
-    "Battery Drain (mAh/day)": "1306",
-    "Number of Apps Installed": "49",
-    "Data Usage (MB/day)": "828",
+    "Battery Drain (mAh/day)": "9284",
+    "Number of Apps Installed": "21",
+    "Data Usage (MB/day)": "1009",
     "Age": "11000000000000000",
     "Gender": "Female",
-    "User Behavior Class": "3"
+    "User Behavior Class": "0"
   }
 ]
