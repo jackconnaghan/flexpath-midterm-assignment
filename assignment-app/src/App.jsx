@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Routes, Link } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -7,11 +7,16 @@ import SearchResults from "./pages/Search";
 //import Search from "./components/SearchComponent";
 import NavBar from "./components/NavBar";
 import PageNotFound from "./pages/PageNotFound";
-import SearchResultPractice from "./components/SearchResultsPractice";
+import SearchComponent from "./components/SearchComponent";
+import { CacheProvider } from "./contexts/CacheResultsContext";
 
 function App() {
+
+  const [cache, setCache] = useState(null);
+
   return (
-    <div>
+    <CacheProvider value={cache}>
+      <div>
       <NavBar />
       <br></br>
       <div>
@@ -22,11 +27,11 @@ function App() {
           <Route class="User Behavior Data" path="/" element={<Home />} />
           <Route class="Search Page" path="/search" element={<SearchResults />} />
           <Route class="Page Not Found" path="/*?" element={<PageNotFound />} />
-          <Route id="Search Result Practice" path="/searchpractice" element={<SearchResultPractice />} />
         </Routes>
         <Footer />
       </div>
     </div>
+    </CacheProvider>
   );
 }
 

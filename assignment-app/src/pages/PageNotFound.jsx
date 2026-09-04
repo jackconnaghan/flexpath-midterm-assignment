@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import freakyBug from "/public/freakyBug.jpg";
+import { useCache } from "../contexts/CacheResultsContext";
 
 function PageNotFound() {
 

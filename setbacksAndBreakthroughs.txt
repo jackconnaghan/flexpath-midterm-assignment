@@ -1,0 +1,20 @@
+Not in order of encounter
+Copious amounts of googling
+
+1. React Context - Where to Wrap
+I was struggling to get my response cache
+to persist between page navigations. When I 
+set the SearchComponent's useEffect to update
+the response with the cached data on page load,
+the cache would already be empty, even though
+I could successfully read the cache as equivalent
+to the response data while on the initial SearchComponent
+load. I figured out that I was "nesting" my provider--
+I wrapped ContextProvider around BrowserRouter in 
+main.jsx, but I also wrapped ContextProvider 
+around the SearchComponent tag in Search.jsx.
+This was causing the cache context to update every
+time the SearchComponent was loaded--not good!
+That was destroying my cache on page switch!
+
+2. 

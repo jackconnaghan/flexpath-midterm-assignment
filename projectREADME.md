@@ -199,7 +199,7 @@ You must create your own components using basic HTML, JSX, and Bootstrap
 	 provided, so that behavior is expected. You can see this in action in the
 	 `demo-app-walkthrough` video in this repo.
 
-#### Metrics DisplayScr
+#### Metrics Display
 1. There should be 4 cards displayed below the Search Menu, each one displaying
    the Average and Median values for a given metric from the returned search
 	 results. The 4 metrics you will report on are:

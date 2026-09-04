@@ -2,7 +2,6 @@ import React from "react";
 import { Link, Route, Routes, Router } from "react-router-dom";
 import Home from "../pages/Home";
 import SearchComponent from "./SearchComponent";
-import SearchResultPractice from "./SearchResultsPractice";
 
 export default function NavBar() {
 
@@ -11,10 +10,10 @@ export default function NavBar() {
             {/* <h1>Hidden Search Page to Simulate Padding</h1> */}
             <nav className="navbar navbar-dark bg-dark fixed-top flex-gap"
                 style={{ alignItems: "center", padding:"16px 16px", justifyContent: "left"}}>
-                <a className="navbar-brand" href="/">User Behavior Data</a>
+                <a className="navbar-brand">User Behavior Data</a>
                 <Link to={"/"}>Home</Link>|||
                 <Link to={"search"}>Search Dataset</Link>|||
-                <Link to={"searchpractice"}>Search Practice</Link>
+                
 
             </nav>
             {/* Regarding these breaks: The internet's solution
