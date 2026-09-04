@@ -18,3 +18,12 @@
     display: "inline-block";
     position: "absolute";
 }
+
+.custom-card-display {
+    padding: 3px 3px 3px 3px;
+    text-align: "center";
+}
+
+.custom-text {
+    text-align: "center";
+}
