@@ -38,7 +38,6 @@ export default function SearchComponent() {
 
         fetchData(baseURL, searchParams);
         setInput("");
-        setCachedResponse(response);
     }
     //responds to change in filterType selector in the form
     function setNewFilterType(e) {
@@ -62,11 +61,8 @@ export default function SearchComponent() {
         if (Array.isArray(cache)) {
             setResponse(cache);
         }
-        //setResponse is a variable that can be "watched", so watch for it running.
-        //This useEffect was changed to allow the "No data to display" tag to render successfully,
-        //as the ternary expression "cache != null" evaluates to true as soon as the cache is updated.
-        //AND AND AND cache being set to an array by default makes other things break. For...
-        // ........some reason.
+        //run on page reload, check if cache is an array. If it is,
+        //that means setCachedResponse has been run, which means we've already made a search.
     }, []);
 
     // The following is some silliness to enable a fun easter egg 
@@ -139,12 +135,14 @@ export default function SearchComponent() {
                                 <img src={kOnzy} className="gif-load align-middle"></img>
                             </div>
                         </div>}
-                    {(!loading && response?.length > 0) ? (
+                    {(!loading && response?.length > 0) &&
                         <h2 className="display-5">Displaying {response?.length} records:</h2>
-                        ) : (
-                        <h2 className="display-5">No records to display</h2>)
-                        }
-                    {(error != "") &&
+                    }
+                    {(!loading && !error && response.length <= 0) &&
+                        <h2 className="display-5">No records to display</h2>
+}
+                        
+                    {(error) &&
                         <h3>Error Encountered! {error}</h3>
                     }
                     <br></br>
