@@ -3,6 +3,7 @@ import kOnzy from "/kOnzy.gif";
 import scaredyDog from "/scaredyDog.jpeg"
 import { useCache } from "../contexts/CacheResultsContext";
 import useFetch from "../hooks/useFetch";
+import SearchMetricCardsComponent from "./SearchMetricCardsComponent";
 
 export default function SearchComponent() {
     //declare states for page updates, keeping this local
@@ -43,46 +44,7 @@ export default function SearchComponent() {
         setFilterTypeValue(e.target.value);
         return filterTypeValue;
     }
-    //keeping these simple math functions local for ease of use;
-    //don't want to build external "math" hook that would also be
-    //responsible for passing state updates, etc.)
-    function calculateAverage(variable) {
-        const avg = response.reduce((addFunction, currentItem) => {
-            return addFunction + (parseInt(currentItem[variable]) || 0);
-        }, 0);
-        return Math.trunc(avg / response.length);
-    }
-
-    function calculateMedian(variable) {
-
-        let med = 0;
-        let unsortedArray = response.reduce((accumulator, currentItem) => {
-            accumulator.push(parseInt(currentItem[variable]));
-            return accumulator; //returning the array means returning it to the next loop; keeps it an array between loops
-        }, []);
-
-        //super nifty, will sort in ascending order easily
-        let sortedArray = unsortedArray.sort((a, b) => a - b);
-
-        //rounds down from (sortedArray.length - 1)/2.
-        //In the event sortedArray.length is an even number,
-        //this will account for the zero-indexing of JS arrays
-        //and give us the middle location (which may be odd; 
-        //that's why we don't check if middle % 2 === 0)
-        const middle = Math.floor((sortedArray.length - 1) / 2);
-
-        //if middle is even, that means we went down from an odd number,
-        //which means sortedArray.length / 2 would return a decimal, 
-        //which means sortedArray.length is odd
-        if (sortedArray.length % 2) {
-            med = sortedArray[middle];
-            //console.log("middle was odd!");
-        } else {
-            med = ((sortedArray[middle] + sortedArray[middle + 1]) / 2);
-            //console.log("middle was even!");
-        };
-        return Math.trunc(med);
-    }
+    
 
     //useEffect to call the CacheResultsContext to maintain
     //fetched results, is called whenever response changes
@@ -169,7 +131,7 @@ export default function SearchComponent() {
                             </div>
                         </div>}
                     {(loading === false & response?.length > 0) &&
-                        <h2 className="display-5">Displaying {response?.length} records</h2>}
+                        <h2 className="display-5">Displaying {response?.length} records:</h2>}
                     {(response?.length <= 0 & error == "")
                         ? <h2 className="display-5">No records to display</h2>
                         : <></>
@@ -194,85 +156,11 @@ export default function SearchComponent() {
                 </div>
 
             </div>
-
-            <div className="row justify-content-around px-1 mb-5">
-                <div className="col-2 mx-1 py-5 border">
-                    <div type="card" id="appUsageTime">
-                        <div className="card-title">
-                            <h4 className="card-text" style={{ textAlign: "center" }}>App Usage Per Day (min/day)</h4>
-                        </div>
-                        <div className="card-body" value="App Usage Time (min/day)">
-                            {
-
-                                (response?.length > 0)
-                                    ? (
-                                        <>
-                                            <p className="card-text" style={{ textAlign: "center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage("App Usage Time (min/day)"))} minutes/day</p>
-                                            <p className="card-text" style={{ textAlign: "center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian("App Usage Time (min/day)"))} minutes/day</p>
-                                        </>
-                                    ) : <p className="card-text" style={{ textAlign: "center" }}>No Average or Media to display</p>
-                            }
-                        </div>
-                    </div>
-                </div>
-                <div className="col-2 mx-1 py-5 border">
-                    <div type="card" id="appUsageTime">
-                        <div className="card-title">
-                            <h4 className="card-text" style={{ textAlign: "center" }}>Screen On Time (hours/day)</h4>
-                        </div>
-                        <div className="card-body" value="Screen On Time (hours/day)">
-                            {
-
-                                (response?.length > 0)
-                                    ? (
-                                        <>
-                                            <p className="card-text" style={{ textAlign: "center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage("Screen On Time (hours/day)"))} hours/day</p>
-                                            <p className="card-text" style={{ textAlign: "center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian("Screen On Time (hours/day)"))} hours/day</p>
-                                        </>
-                                    ) : <p className="card-text" style={{ textAlign: "center" }}>No Average or Media to display</p>
-                            }
-                        </div>
-                    </div>
-                </div>
-                <div className="col-2 mx-1 py-5 border">
-                    <div type="card" id="numberOfAppsInstalled">
-                        <div className="card-title">
-                            <h4 className="card-text" style={{ textAlign: "center" }}>Number of Apps Installed</h4>
-                        </div>
-                        <div className="card-body" value="Number of Apps Installed">
-                            {
-
-                                (response?.length > 0)
-                                    ? (
-                                        <>
-                                            <p className="card-text" style={{ textAlign: "center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage("Number of Apps Installed"))}</p>
-                                            <p className="card-text" style={{ textAlign: "center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian("Number of Apps Installed"))}</p>
-                                        </>
-                                    ) : <p className="card-text" style={{ textAlign: "center" }}>No Average or Media to display</p>
-                            }
-                        </div>
-                    </div>
-                </div>
-                <div className="col-2 mx-1 py-5 border">
-                    <div type="card" id="age">
-                        <div className="card-title">
-                            <h4 className="card-text" style={{ textAlign: "center" }}>Age</h4>
-                        </div>
-                        <div className="card-body" value="Age">
-                            {
-
-                                (response?.length > 0)
-                                    ? (
-                                        <>
-                                            <p className="card-text" style={{ textAlign: "center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage("Age"))}</p>
-                                            <p className="card-text" style={{ textAlign: "center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian("Age"))}</p>
-                                        </>
-                                    ) : <p className="card-text" style={{ textAlign: "center" }}>No Average or Media to display</p>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {/* Include response as a prop for SMCC to keep
+            the value of response the same between comps.
+            DO NOT call useFetch again! Doing that will create a new
+            response object! I dont wanna do that */}
+            <SearchMetricCardsComponent response={response} loading={loading} />
             <table className="table">
                 <thead>
                     <tr>
