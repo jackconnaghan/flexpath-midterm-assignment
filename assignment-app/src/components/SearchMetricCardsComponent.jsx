@@ -49,12 +49,12 @@ export default function SearchMetricCardsComponent({ response, loading }) {
 
     console.log("Search Metrics Rendering Now:");
     return (
-        <div className="row justify-content-around px-1 mb-5">
+        <div className="row d-flex justify-content-between p-1 b-5 mb-5">
             {dataAreas.map((option, index) => (
-                <div className="col-2 mx-1 py-3 border position-relative" key={index}>
+                <div className="col-2 mx-1 py-3 flex-fill border position-relative" key={index}>
                     <div type="card" >
                         <div className="card-title border position-sticky top-25 start-25 my-2">
-                            <h4 className="flex-column" style={{ textAlign: "center" }}>{option[0]}</h4>
+                            <h4 className="flex-fill" style={{ textAlign: "center" }}>{option[0]}</h4>
                         </div>
                         <div className="card-body border position-sticky bottom-0 start-0 end-0">
                             {

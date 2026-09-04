@@ -4,6 +4,7 @@ import scaredyDog from "/scaredyDog.jpeg"
 import { useCache } from "../contexts/CacheResultsContext";
 import useFetch from "../hooks/useFetch";
 import SearchMetricCardsComponent from "./SearchMetricCardsComponent";
+import SearchTableComponent from "./SearchTableComponent";
 
 export default function SearchComponent() {
     //declare states for page updates, keeping this local
@@ -44,7 +45,7 @@ export default function SearchComponent() {
         setFilterTypeValue(e.target.value);
         return filterTypeValue;
     }
-    
+
 
     //useEffect to call the CacheResultsContext to maintain
     //fetched results, is called whenever response changes
@@ -58,10 +59,15 @@ export default function SearchComponent() {
     // to whatever value is still in cache. This
     // maintains results between page navigation
     useEffect(() => {
-        console.log("cache:");
-        console.log(cache);
-        setResponse(cache);
-    }, [])
+        if (Array.isArray(cache)) {
+            setResponse(cache);
+        }
+        //setResponse is a variable that can be "watched", so watch for it running.
+        //This useEffect was changed to allow the "No data to display" tag to render successfully,
+        //as the ternary expression "cache != null" evaluates to true as soon as the cache is updated.
+        //AND AND AND cache being set to an array by default makes other things break. For...
+        // ........some reason.
+    }, []);
 
     // The following is some silliness to enable a fun easter egg 
     // (and reach the "exceeding expectations" tier of the project grade).
@@ -85,6 +91,7 @@ export default function SearchComponent() {
         setInput(e.dataTransfer.getData('text/plain'));
     }
     //return component layout
+    console.log(response?.length);
     return (
         <div className="container m-0">
             <div className="row m-4" id="hold-search-and-doggy">
@@ -119,23 +126,24 @@ export default function SearchComponent() {
                                 //handleInputValueClear;
                                 handleDrop(e);
                             }}></input>
-                            <br></br>
-                        <button type="submit" className="btn btn-outline-secondary">Submit</button>
+                        <br></br>
+                        <button type="submit" className="btn btn-primary">Submit</button>
                     </form>
                     <br></br>
-                    {(loading === true) &&
+                    {/* BE CAREFUL WITH && as it can return a 0 that just gets rendered for free
+                    He gets in. He gets it done. He leaves. */}
+                    {(loading && !error) &&
                         <div className="text-centered" style={{ display: "flex" }}>
                             <h2 className="display-5 align-middle">Loading...</h2>
                             <div className="gif-load align-middle">
                                 <img src={kOnzy} className="gif-load align-middle"></img>
                             </div>
                         </div>}
-                    {(loading === false & response?.length > 0) &&
-                        <h2 className="display-5">Displaying {response?.length} records:</h2>}
-                    {(response?.length <= 0 & error == "")
-                        ? <h2 className="display-5">No records to display</h2>
-                        : <></>
-                    }
+                    {(!loading && response?.length > 0) ? (
+                        <h2 className="display-5">Displaying {response?.length} records:</h2>
+                        ) : (
+                        <h2 className="display-5">No records to display</h2>)
+                        }
                     {(error != "") &&
                         <h3>Error Encountered! {error}</h3>
                     }
@@ -161,42 +169,8 @@ export default function SearchComponent() {
             DO NOT call useFetch again! Doing that will create a new
             response object! I dont wanna do that */}
             <SearchMetricCardsComponent response={response} loading={loading} />
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th scope="col">User ID</th>
-                        <th scope="col">Device Model</th>
-                        <th scope="col">Operating System</th>
-                        <th scope="col">App Usage Time (min/day)</th>
-                        <th scope="col">Screen On Time (hours/day)</th>
-                        <th scope="col">Battery Drain (mAh/day)</th>
-                        <th scope="col">Number of Apps Installed</th>
-                        <th scope="col">Data Usage (MB/day)</th>
-                        <th scope="col">Age</th>
-                        <th scope="col">Gender</th>
-                        <th scope="col">User Behavior Class</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {(response?.length > 0) && (
-                        response.map(item => (
-                            <tr key={item["User ID"]}>
-                                <td>{Intl.NumberFormat("en-US").format(item["User ID"])}</td>
-                                <td>{item["Device Model"]}</td>
-                                <td>{item["Operating System"]}</td>
-                                <td>{Intl.NumberFormat("en-US").format(item["App Usage Time (min/day)"])}</td>
-                                <td>{Intl.NumberFormat("en-US").format(item["Screen On Time (hours/day)"])}</td>
-                                <td>{Intl.NumberFormat("en-US").format(item["Battery Drain (mAh/day)"])}</td>
-                                <td>{Intl.NumberFormat("en-US").format(item["Number of Apps Installed"])}</td>
-                                <td>{Intl.NumberFormat("en-US").format(item["Data Usage (MB/day)"])}</td>
-                                <td>{Intl.NumberFormat("en-US").format(item["Age"])}</td>
-                                <td>{item["Gender"]}</td>
-                                <td>{item["User Behavior Class"]}</td>
-                            </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+            <SearchTableComponent response={response} />
+
         </div>
 
     );
