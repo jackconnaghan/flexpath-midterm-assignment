@@ -1,15 +1,30 @@
 import React, { useState, useEffect } from "react";
 import kOnzy from "/./public/kOnzy.gif";
 import { useCache } from "../contexts/CacheResultsContext";
+import useFetch from "../hooks/useFetch";
 
 export default function SearchComponent() {
-    //declare states for page updates
+    //declare states for page updates, keeping this local
     const [input, setInput] = useState("");
     const [filterTypeValue, setFilterTypeValue] = useState("unfiltered");
-    const [loading, setLoading] = useState(false);
-    const [response, setResponse] = useState([]);
-    const [error, setError] = useState(false);
+    //const [localLoading, setLocalLoading] = useState(false);
+    const [localResponse, setLocalResponse] = useState([]);
+    // const [error, setError] = useState(false);
 
+    //pulling the handleSubmit function directly from the useFetch hook
+    //const { handleSubmit } = useFetch();
+    const { fetchData, response, loading, error } = useFetch();
+
+
+    //     {
+    //     response: [],
+    //     loading: false,
+    //     error: false,
+    // });
+
+    //this pulls the exact variables from
+    //CacheResults Context and allows them to
+    //mutate within SearchComponent
     const { cache, setCachedResponse } = useCache(null);
 
     //declare filterType choices
@@ -17,56 +32,36 @@ export default function SearchComponent() {
         ["unfiltered", "gender", "operatingSystem", "model", "behaviorclass"];
 
     //onSubmit function from form
-    function handleSubmit(e) {
+    // function handleSubmit(e);
+    //NOPE we're keeping the handleSubmit function local
+    async function handleSubmit(e) {
         e.preventDefault();
-        const keyword = input.trim();
+        //grabbing keyword and filter and setting params
+        //before sending off to useFetch
+        //const keyword = input.trim();
         const searchParams = new URLSearchParams({
             filterType: filterTypeValue,
-            keyword: input,
+            keyword: input.trim(),
         });
+        //we call the function passed by useFetch "fetchData" here
+        //to comply with the Rules of Hooks
+        // fetchData({
+        //     loading: true
+        // });
 
-        setLoading(true);
+        const baseURL = `/api/data/search?`;
+        
+        //useFetch(url);
 
-        const url = `/api/data/search?${searchParams.toString()}`;
-
-        async function fetchData() {
-            //sets error to false in case the last submission attempt
-            //failed
-            setError(false);
-
-            try {
-                console.log(url);
-                let response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`Request failed with status ${response.status}`);
-                }
-                console.log(response.ok);
-                console.log(response);
-                let responseData = await response.json();
-
-                setResponse(responseData);
-                console.log(responseData);
-                //responseData.map(datum => {console.log(datum)});
-                console.log(`response length: ${responseData.length}`);
-                setCachedResponse(responseData);
-                console.log(cache);
-            } catch (error) {
-                //even though error is a boolean when it's declared,
-                //setting it to a string works just fine. Who knows 
-                //why. I didn't build react
-                setError(error.message);
-                console.error(`Fetch error: ${error}`);
-            } finally {
-                setLoading(false);
-            }
-
-        };
 
         //simulate loading time
         setTimeout(() => {
-            fetchData();
-            console.log(`Keyword sent as param: ${keyword}`);
+            //setLocalLoading(true);
+            fetchData(baseURL, searchParams);
+            //console.log(`Keyword sent as param: ${keyword}`);
             setInput("");
+            setLocalResponse(response);
+            //setLocalLoading(false);
         }, 1500);
 
     }
@@ -117,7 +112,7 @@ export default function SearchComponent() {
     }
 
     //useEffect to call the CacheResultsContext to maintain
-    //fetched results
+    //fetched results, is called whenever response changes
     useEffect(() => {
 
         setCachedResponse(response)
@@ -125,11 +120,13 @@ export default function SearchComponent() {
 
     }, [response]);
 
-
+    // useEffect to log the cache and set response
+    // to whatever value is still in cache. This
+    // maintains results between page navigation
     useEffect(() => {
         console.log("cache:");
         console.log(cache);
-        setResponse(cache);
+        setLocalResponse(cache);
     }, [])
 
     //return component layout
@@ -184,7 +181,7 @@ export default function SearchComponent() {
                 <div className="col-2 mx-1 py-5 border">
                     <div type="card" id="appUsageTime">
                         <div className="card-title">
-                            <h4 className="card-text" style={{ textAlign:"center" }}>App Usage Per Day (min/day)</h4>
+                            <h4 className="card-text" style={{ textAlign: "center" }}>App Usage Per Day (min/day)</h4>
                         </div>
                         <div className="card-body" value="App Usage Time (min/day)">
                             {
@@ -192,10 +189,10 @@ export default function SearchComponent() {
                                 (response?.length > 0)
                                     ? (
                                         <>
-                                            <p className="card-text" style={{ textAlign:"center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage("App Usage Time (min/day)"))} minutes/day</p>
-                                            <p className="card-text" style={{ textAlign:"center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian("App Usage Time (min/day)"))} minutes/day</p>
+                                            <p className="card-text" style={{ textAlign: "center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage("App Usage Time (min/day)"))} minutes/day</p>
+                                            <p className="card-text" style={{ textAlign: "center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian("App Usage Time (min/day)"))} minutes/day</p>
                                         </>
-                                    ) : <p className="card-text" style={{ textAlign:"center" }}>No Average or Media to display</p>
+                                    ) : <p className="card-text" style={{ textAlign: "center" }}>No Average or Media to display</p>
                             }
                         </div>
                     </div>
@@ -203,7 +200,7 @@ export default function SearchComponent() {
                 <div className="col-2 mx-1 py-5 border">
                     <div type="card" id="appUsageTime">
                         <div className="card-title">
-                            <h4 className="card-text" style={{ textAlign:"center" }}>Screen On Time (hours/day)</h4>
+                            <h4 className="card-text" style={{ textAlign: "center" }}>Screen On Time (hours/day)</h4>
                         </div>
                         <div className="card-body" value="Screen On Time (hours/day)">
                             {
@@ -211,10 +208,10 @@ export default function SearchComponent() {
                                 (response?.length > 0)
                                     ? (
                                         <>
-                                            <p className="card-text" style={{ textAlign:"center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage("Screen On Time (hours/day)"))} hours/day</p>
-                                            <p className="card-text" style={{ textAlign:"center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian("Screen On Time (hours/day)"))} hours/day</p>
+                                            <p className="card-text" style={{ textAlign: "center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage("Screen On Time (hours/day)"))} hours/day</p>
+                                            <p className="card-text" style={{ textAlign: "center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian("Screen On Time (hours/day)"))} hours/day</p>
                                         </>
-                                    ) : <p className="card-text" style={{ textAlign:"center" }}>No Average or Media to display</p>
+                                    ) : <p className="card-text" style={{ textAlign: "center" }}>No Average or Media to display</p>
                             }
                         </div>
                     </div>
@@ -222,7 +219,7 @@ export default function SearchComponent() {
                 <div className="col-2 mx-1 py-5 border">
                     <div type="card" id="numberOfAppsInstalled">
                         <div className="card-title">
-                            <h4 className="card-text" style={{ textAlign:"center" }}>Number of Apps Installed</h4>
+                            <h4 className="card-text" style={{ textAlign: "center" }}>Number of Apps Installed</h4>
                         </div>
                         <div className="card-body" value="Number of Apps Installed">
                             {
@@ -230,10 +227,10 @@ export default function SearchComponent() {
                                 (response?.length > 0)
                                     ? (
                                         <>
-                                            <p className="card-text" style={{ textAlign:"center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage("Number of Apps Installed"))}</p>
-                                            <p className="card-text" style={{ textAlign:"center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian("Number of Apps Installed"))}</p>
+                                            <p className="card-text" style={{ textAlign: "center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage("Number of Apps Installed"))}</p>
+                                            <p className="card-text" style={{ textAlign: "center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian("Number of Apps Installed"))}</p>
                                         </>
-                                    ) : <p className="card-text" style={{ textAlign:"center" }}>No Average or Media to display</p>
+                                    ) : <p className="card-text" style={{ textAlign: "center" }}>No Average or Media to display</p>
                             }
                         </div>
                     </div>
@@ -241,7 +238,7 @@ export default function SearchComponent() {
                 <div className="col-2 mx-1 py-5 border">
                     <div type="card" id="age">
                         <div className="card-title">
-                            <h4 className="card-text" style={{ textAlign:"center" }}>Age</h4>
+                            <h4 className="card-text" style={{ textAlign: "center" }}>Age</h4>
                         </div>
                         <div className="card-body" value="Age">
                             {
@@ -249,10 +246,10 @@ export default function SearchComponent() {
                                 (response?.length > 0)
                                     ? (
                                         <>
-                                            <p className="card-text" style={{ textAlign:"center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage("Age"))}</p>
-                                            <p className="card-text" style={{ textAlign:"center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian("Age"))}</p>
+                                            <p className="card-text" style={{ textAlign: "center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage("Age"))}</p>
+                                            <p className="card-text" style={{ textAlign: "center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian("Age"))}</p>
                                         </>
-                                    ) : <p className="card-text" style={{ textAlign:"center" }}>No Average or Media to display</p>
+                                    ) : <p className="card-text" style={{ textAlign: "center" }}>No Average or Media to display</p>
                             }
                         </div>
                     </div>

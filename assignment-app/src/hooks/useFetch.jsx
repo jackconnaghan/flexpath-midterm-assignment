@@ -1,39 +1,54 @@
 import React, { useState, useEffect } from "react";
 
-export default function useFetch(filterType, keyword) {
+//for my next trick, I will create a custom hook
+//to take care of fetching data from the server
+export default function useFetch() {
 
-    const [data, setData] = useState([]);
+    const [response, setResponse] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [error, setError] = useState(false);
 
-    useEffect(() => {
-        async function fetchURL() {
-            try {
-                setLoading(true);
-                const response = await fetch(`/api/data/search?filterType=${filterType}&keyword=${keyword}`);
-                if (!response.ok) {
-                    throw new Error("Error! Response was NOT okay!");
-                }
-                console.log(response);
-                setData(await response.json());
-            } catch (error) {
-                setError(`Error Spotted: ${error.message}`);
-                setData("");
+    async function fetchData(baseURL, searchParams) {
+        //sets error to false in case the last submission attempt
+        //failed
+        setLoading(true);
+        setError(false);
+
+        const url = `${baseURL}${searchParams.toString()}`
+        // for (let i = 0; i <= 100000000; i++) {}
+        try {
+            console.log(url);
+            let response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Request failed with status ${response.status}`);
             }
+            // console.log(response.ok);
+            // console.log(response);
+            let responseData = await response.json();
+
+            setResponse(responseData);
+            // console.log(responseData);
+            //responseData.map(datum => {console.log(datum)});
+            console.log(`response length: ${responseData.length}`);
+            //setCachedResponse(responseData);
+            //console.log(cache);
+            setLoading(false);
+        } catch (error) {
+            //even though error is a boolean when it's declared,
+            //setting it to a string works just fine. Who knows 
+            //why. I didn't build react
+            setError(error.message);
+            console.error(`Fetch error: ${error}`);
             setLoading(false);
         }
-        fetchURL();
-    }, []);
+        return { loading };
+    }
 
-    // if (loading) return <div>Loading data...</div>;
-    // if (error) return <div>{error}</div>
-    // if (!data) return null;
 
-    return {
-        data,
+    return ({
+        fetchData,
+        response,
         loading,
         error,
-    };
-
-
+    });
 }
