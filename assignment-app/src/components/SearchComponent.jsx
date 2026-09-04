@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import kOnzy from "/./public/kOnzy.gif";
+import kOnzy from "/kOnzy.gif";
+import doggy from "/doggy.jpeg"
 import { useCache } from "../contexts/CacheResultsContext";
 import useFetch from "../hooks/useFetch";
 
@@ -103,51 +104,61 @@ export default function SearchComponent() {
     //return component layout
     return (
         <div className="container-md">
-            <h1 className="display-4">Search Through The Database</h1>
-            <form onSubmit={(e) => {
-                handleSubmit(e);
-            }}>
-                <p>Select data point to filter search by</p>
-                <select className="row-g1 form-select form-select-sm w-25"
-                    value={filterTypeValue}
-                    onChange={(e) => {
-                        setNewFilterType(e);
+            <div className="container-md row" id="hold-search-and-doggy">
+                <div className="col"><h1 className="display-4 container-fluid">Search Through The Database</h1>
+
+                    <form onSubmit={(e) => {
+                        handleSubmit(e);
                     }}>
-                    {filterTypeOptions.map((option, index) => (
-                        <option key={`${index}`}>{`${option}`}</option>
-                    ))}
-                </select>
-                <br></br>
-                <br></br>
-                <input className="form-control w-25" type="text" placeholder="keyword..."
-                    value={input}
-                    //this does not work without the brackets, 
-                    //as React will not prioritize the onChange event
-                    //and will cache it for async
-                    onChange={(e) => {
-                        setInput(e.target.value)
+                        <p>Select data point to filter search by</p>
+                        <select className="row-g1 form-select form-select-sm w-50"
+                            value={filterTypeValue}
+                            onChange={(e) => {
+                                setNewFilterType(e);
+                            }}>
+                            {filterTypeOptions.map((option, index) => (
+                                <option key={`${index}`}>{`${option}`}</option>
+                            ))}
+                        </select>
+                        <br></br>
+                        <br></br>
+                        <input className="form-control w-50" type="text" placeholder="keyword..."
+                            value={input}
+                            //this does not work without the brackets, 
+                            //as React will not prioritize the onChange event
+                            //and will cache it for async
+                            onChange={(e) => {
+                                setInput(e.target.value)
+                            }
+                            }></input>
+                        <button type="submit" className="btn btn-outline-secondary">Submit</button>
+                    </form>
+                    <br></br>
+                    {(loading === true) &&
+                        <div className="text-centered" style={{ display: "flex" }}>
+                            <h2 className="display-5 align-middle">Loading...</h2>
+                            <div className="gif-load align-middle">
+                                <img src={kOnzy} className="gif-load align-middle"></img>
+                            </div>
+                        </div>}
+                    {(loading === false & response?.length > 0) &&
+                        <h2 className="display-5">Displaying {response?.length} records</h2>}
+                    {(response?.length <= 0 & error == "")
+                        ? <h2 className="display-5">No records to display</h2>
+                        : <></>
                     }
-                    }></input>
-                <button type="submit" className="btn btn-outline-secondary">Submit</button>
-            </form>
-            <br></br>
-            {(loading === true) &&
-                <div className="text-centered" style={{ display: "flex" }}>
-                    <h2 className="display-5 align-middle">Loading...</h2>
-                    <div className="gif-load align-middle">
-                        <img src={kOnzy} className="gif-load align-middle"></img>
-                    </div>
-                </div>}
-            {(loading === false & response?.length > 0) &&
-                <h2 className="display-5">Displaying {response?.length} records</h2>}
-            {(response?.length <= 0 & error == "")
-                ? <h2 className="display-5">No records to display</h2>
-                : <></>
-            }
-            {(error != "") &&
-                <h3>Error Encountered! {error}</h3>
-            }
-            <br></br>
+                    {(error != "") &&
+                        <h3>Error Encountered! {error}</h3>
+                    }
+                    <br></br>
+                </div>
+                {/* The className must include d-flex in order to justify content */}
+                <div className="col d-flex justify-content-end">
+                    <img src={doggy} className="img-thumbnail" style={{ height: 400 }}></img>
+                </div>
+
+            </div>
+
             <div className="row justify-content-around px-1 mb-5">
                 <div className="col-2 mx-1 py-5 border">
                     <div type="card" id="appUsageTime">
