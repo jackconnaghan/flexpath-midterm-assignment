@@ -180,8 +180,8 @@ export default function SearchComponent() {
                     <br></br>
                 </div>
                 {/* The className must include d-flex in order to justify content */}
-                <div className="col-4 d-flex img-fluid justify-content-end w-25 border border-primary">
-                    <img src={scaredyDog} className="img-thumbnail" style={{ objectFit: "cover", aspectRatio: 1, height: 300 }}
+                <div className="col-4 d-flex justify-content-middle">
+                    <img src={scaredyDog} className="img-thumbnail" style={{ objectFit: "contain", aspectRatio: 1, height: 300 }}
                         draggable="true"
                         alt="Pupper Phone 31"
                         onDragStart={handleDragStart}
