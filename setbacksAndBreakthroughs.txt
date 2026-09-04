@@ -17,4 +17,6 @@ This was causing the cache context to update every
 time the SearchComponent was loaded--not good!
 That was destroying my cache on page switch!
 
-2. 
+2. useFetch Hook Implementation
+Learned a lot about how state setters and variables are passed between
+a custom hook and a user of that custom hook

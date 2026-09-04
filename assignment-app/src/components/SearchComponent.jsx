@@ -7,20 +7,9 @@ export default function SearchComponent() {
     //declare states for page updates, keeping this local
     const [input, setInput] = useState("");
     const [filterTypeValue, setFilterTypeValue] = useState("unfiltered");
-    //const [localLoading, setLocalLoading] = useState(false);
-    const [localResponse, setLocalResponse] = useState([]);
-    // const [error, setError] = useState(false);
 
-    //pulling the handleSubmit function directly from the useFetch hook
-    //const { handleSubmit } = useFetch();
-    const { fetchData, response, loading, error } = useFetch();
-
-
-    //     {
-    //     response: [],
-    //     loading: false,
-    //     error: false,
-    // });
+    //pulling object from useFetch that gives us all vars in that hook
+    const { fetchData, setResponse, response, loading, error } = useFetch();
 
     //this pulls the exact variables from
     //CacheResults Context and allows them to
@@ -31,46 +20,31 @@ export default function SearchComponent() {
     const filterTypeOptions =
         ["unfiltered", "gender", "operatingSystem", "model", "behaviorclass"];
 
-    //onSubmit function from form
-    // function handleSubmit(e);
-    //NOPE we're keeping the handleSubmit function local
+    //run when Submit is clicked
+    //handles fetch logic with useFetch hook
     async function handleSubmit(e) {
         e.preventDefault();
         //grabbing keyword and filter and setting params
         //before sending off to useFetch
-        //const keyword = input.trim();
         const searchParams = new URLSearchParams({
             filterType: filterTypeValue,
             keyword: input.trim(),
         });
-        //we call the function passed by useFetch "fetchData" here
-        //to comply with the Rules of Hooks
-        // fetchData({
-        //     loading: true
-        // });
 
         const baseURL = `/api/data/search?`;
-        
-        //useFetch(url);
 
-
-        //simulate loading time
-        setTimeout(() => {
-            //setLocalLoading(true);
-            fetchData(baseURL, searchParams);
-            //console.log(`Keyword sent as param: ${keyword}`);
-            setInput("");
-            setLocalResponse(response);
-            //setLocalLoading(false);
-        }, 1500);
-
+        fetchData(baseURL, searchParams);
+        setInput("");
+        setCachedResponse(response);
     }
-
+    //responds to change in filterType selector in the form
     function setNewFilterType(e) {
         setFilterTypeValue(e.target.value);
         return filterTypeValue;
     }
-
+    //keeping these simple math functions local for ease of use;
+    //don't want to build external "math" hook that would also be
+    //responsible for passing state updates, etc.)
     function calculateAverage(variable) {
         const avg = response.reduce((addFunction, currentItem) => {
             return addFunction + (parseInt(currentItem[variable]) || 0);
@@ -81,7 +55,6 @@ export default function SearchComponent() {
     function calculateMedian(variable) {
 
         let med = 0;
-
         let unsortedArray = response.reduce((accumulator, currentItem) => {
             accumulator.push(parseInt(currentItem[variable]));
             return accumulator; //returning the array means returning it to the next loop; keeps it an array between loops
@@ -96,7 +69,7 @@ export default function SearchComponent() {
         //and give us the middle location (which may be odd; 
         //that's why we don't check if middle % 2 === 0)
         const middle = Math.floor((sortedArray.length - 1) / 2);
-        //console.log(middle);
+
         //if middle is even, that means we went down from an odd number,
         //which means sortedArray.length / 2 would return a decimal, 
         //which means sortedArray.length is odd
@@ -107,16 +80,14 @@ export default function SearchComponent() {
             med = ((sortedArray[middle] + sortedArray[middle + 1]) / 2);
             //console.log("middle was even!");
         };
-        //console.log("Median: " + med);
         return Math.trunc(med);
     }
 
     //useEffect to call the CacheResultsContext to maintain
     //fetched results, is called whenever response changes
     useEffect(() => {
-
-        setCachedResponse(response)
-
+        setCachedResponse(response);
+        //setLocalResponse(response);
 
     }, [response]);
 
@@ -126,7 +97,7 @@ export default function SearchComponent() {
     useEffect(() => {
         console.log("cache:");
         console.log(cache);
-        setLocalResponse(cache);
+        setResponse(cache);
     }, [])
 
     //return component layout

@@ -15,23 +15,25 @@ export default function useFetch() {
         setError(false);
 
         const url = `${baseURL}${searchParams.toString()}`
-        // for (let i = 0; i <= 100000000; i++) {}
+        //setting the setTimeout promise in this way
+        //bypasses having to set the setTimeout around the try/catch
+        // block, which wouldn't work anyway
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
         try {
             console.log(url);
+            //the awaited Promise outside the try block
+            //is still running, so the await fetch 
+            //request has to wait until resolve
+            //runs after 1500 mili
             let response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`Request failed with status ${response.status}`);
             }
-            // console.log(response.ok);
-            // console.log(response);
             let responseData = await response.json();
-
             setResponse(responseData);
-            // console.log(responseData);
-            //responseData.map(datum => {console.log(datum)});
             console.log(`response length: ${responseData.length}`);
-            //setCachedResponse(responseData);
-            //console.log(cache);
+            
             setLoading(false);
         } catch (error) {
             //even though error is a boolean when it's declared,
@@ -41,12 +43,15 @@ export default function useFetch() {
             console.error(`Fetch error: ${error}`);
             setLoading(false);
         }
-        return { loading };
     }
 
-
+    // Passing setResponse allows me to call it within SearchComponent,
+    // which allows me to set the response (what is rendered)
+    // to whatever was set in "cache" without holding a 
+    // "localResponse" variable (confusing and clunky)
     return ({
         fetchData,
+        setResponse,
         response,
         loading,
         error,
