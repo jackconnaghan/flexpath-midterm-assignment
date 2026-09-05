@@ -17,7 +17,7 @@ export default function SearchTableComponent({ response }) {
     ];
 
     return (
-        <table className="table">
+        <table className="table table-striped">
                 <thead>
                     <tr>
                         {dataAreas.map((item, key) => (

@@ -18,21 +18,20 @@ function App() {
   return (
     <CacheProvider value={cache}>
       <div>
-        <ErrorBoundary>
           <NavBar />
-        </ErrorBoundary>
-        <br></br>
-        <div>
-          <Routes>
-            {/* Even though some links live exclusively in the NavBar
+
+          <br></br>
+          <div>
+            <Routes>
+              {/* Even though some links live exclusively in the NavBar
         component, all <Routes> are instantiated in the 
           App.jsx file to ensure high-level compatibility. */}
-            <Route class="User Behavior Data" path="/" element={<Home />} />
-            <Route class="Search Page" path="/search" element={<SearchResults />} />
-            <Route class="Page Not Found" path="/*?" element={<PageNotFound />} />
-          </Routes>
-          <Footer />
-        </div>
+              <Route class="User Behavior Data" path="/" element={<Home />} />
+              <Route class="Search Page" path="/search" element={<SearchResults />} />
+              <Route class="Page Not Found" path="/*?" element={<PageNotFound />} />
+            </Routes>
+            <Footer />
+          </div>
       </div>
     </CacheProvider>
   );

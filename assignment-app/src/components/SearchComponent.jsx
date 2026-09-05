@@ -5,6 +5,9 @@ import { useCache } from "../contexts/CacheResultsContext";
 import useFetch from "../hooks/useFetch";
 import SearchMetricCardsComponent from "./SearchMetricCardsComponent";
 import SearchTableComponent from "./SearchTableComponent";
+import FormComponent from "./FormComponent";
+import TextResponseComponent from "./TextResponseComponent";
+import ErrorBoundary from "./ErrorBoundary";
 
 export default function SearchComponent() {
     //declare states for page updates, keeping this local
@@ -93,58 +96,12 @@ export default function SearchComponent() {
             <div className="row m-4" id="hold-search-and-doggy">
                 <h1 className="display-4 p-0">Search Through The Database</h1>
                 <div className="col-8">
-                    <form onSubmit={(e) => {
-                        handleSubmit(e);
-                    }}>
-                        <p>Select data point to filter search by</p>
-                        <select className="row-g1 form-select form-select-sm w-50"
-                            value={filterTypeValue}
-                            onChange={(e) => {
-                                setNewFilterType(e);
-                            }}>
-                            {filterTypeOptions.map((option, index) => (
-                                <option key={`${index}`}>{`${option}`}</option>
-                            ))}
-                        </select>
-                        <br></br>
-                        <br></br>
-                        <input className="form-control w-50" type="text" placeholder="keyword..."
-                            value={input}
-                            //this does not work without the brackets, 
-                            //as React will not prioritize the onChange event
-                            //and will cache it for async
-                            onChange={(e) => {
-                                setInput(e.target.value)
-                            }
-
-                            }
-                            onDrop={(e) => {
-                                //handleInputValueClear;
-                                handleDrop(e);
-                            }}></input>
-                        <br></br>
-                        <button type="submit" className="btn btn-primary">Submit</button>
-                    </form>
+                    <FormComponent input={input} setInput={setInput} filterTypeValue={filterTypeValue}
+                        setNewFilterType={setNewFilterType} filterTypeOptions={filterTypeOptions} handleSubmit={handleSubmit} handleDrop={handleDrop} />
                     <br></br>
-                    {/* BE CAREFUL WITH && as it can return a 0 that just gets rendered for free
-                    He gets in. He gets it done. He leaves. */}
-                    {(loading && !error) &&
-                        <div className="text-centered" style={{ display: "flex" }}>
-                            <h2 className="display-5 align-middle">Loading...</h2>
-                            <div className="gif-load align-middle">
-                                <img src={kOnzy} className="gif-load align-middle"></img>
-                            </div>
-                        </div>}
-                    {(!loading && response?.length > 0) &&
-                        <h2 className="display-5">Displaying {response?.length} records:</h2>
-                    }
-                    {(!loading && !error && response.length <= 0) &&
-                        <h2 className="display-5">No records to display</h2>
-}
-                        
-                    {(error) &&
-                        <h3>Error Encountered! {error}</h3>
-                    }
+                    <ErrorBoundary error={error}>
+                        <TextResponseComponent response={response} loading={loading} error={error} />
+                    </ErrorBoundary>
                     <br></br>
                 </div>
                 {/* The className must include d-flex in order to justify content */}

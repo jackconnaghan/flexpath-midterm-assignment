@@ -1,5 +1,4 @@
-.funky-text {
-    text-align:"center";
+.error-text {
     color: "red";
 }
 /* THis is SOOOooOO silly */
@@ -26,4 +25,25 @@
 
 .custom-text {
     text-align: "center";
+}
+
+.custom-footer {
+    background-color: #81ba4c;
+    border-style: "solid";
+    border-color: "coral";
+    border-width: 100px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 100;
+}
+
+.custom-footer-text {
+    color: "yellow";
+    text-shadow:20px 10px 15px crimson;
+    font-size: 30px;
+}
+
+.freaky-bug {
+    display: "flex";
+    height: 50px;
+    box-shadow: 20px 10px 15px crimson;
 }
