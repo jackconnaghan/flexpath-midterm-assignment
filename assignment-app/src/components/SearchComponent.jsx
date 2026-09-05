@@ -37,7 +37,7 @@ export default function SearchComponent() {
             keyword: input.trim(),
         });
 
-        const baseURL = `/api/data/search?`;
+        const baseURL = `/api/data/searjch?`;
 
         fetchData(baseURL, searchParams);
         setInput("");

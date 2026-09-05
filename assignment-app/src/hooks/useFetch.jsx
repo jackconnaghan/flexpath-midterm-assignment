@@ -17,7 +17,7 @@ export default function useFetch() {
         const url = `${baseURL}${searchParams.toString()}`
         //setting the setTimeout promise in this way
         //bypasses having to set the setTimeout around the try/catch
-        // block, which wouldn't work anyway
+        // block, which wouldn't work anyway due to rules of hooks
         await new Promise((resolve) => setTimeout(resolve, 1500));
 
         try {
