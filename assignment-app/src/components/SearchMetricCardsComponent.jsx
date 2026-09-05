@@ -1,5 +1,5 @@
 import React from "react";
-import useFetch from "../hooks/useFetch";
+import PropTypes from "prop-types";
 
 export default function SearchMetricCardsComponent({ response, loading }) {
 
@@ -53,7 +53,7 @@ export default function SearchMetricCardsComponent({ response, loading }) {
             {dataAreas.map((option, index) => (
                 <div className="col-2 mx-1 py-3 flex-fill border position-relative" key={index}>
                     <div type="card" >
-                        <div className="card-title position-sticky top-25 start-25">
+                        <div className="card-title position-relative top-25 start-25">
                             <h4 className="flex-fill" style={{ textAlign: "center" }}>{option[0]}</h4>
                         </div>
                         <div className="card-body border position-sticky bottom-0 start-0 end-0">
@@ -73,3 +73,14 @@ export default function SearchMetricCardsComponent({ response, loading }) {
         </div>
     )
 }
+//this part came about because of an error VSCode gave me saying my 
+// props were not type validated. The error didn't prevent compiling, but 
+// it led me to investigate what validation meant. Turns out that's what 
+//TypeScript is for! But I didn't want to rework my entire app into TS at this time.
+//So! I leveraged a thing called PropTypes which allows for the.type validation.
+//I might apply this to other parts of the project, but since it doesn't affect
+//compilation, I'm reticent to do that right now.
+SearchMetricCardsComponent.propTypes = {
+    response: PropTypes.arrayOf(PropTypes.object),
+    loading: PropTypes.bool
+};
