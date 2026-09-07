@@ -31,19 +31,57 @@
     background-color: #81ba4c;
     border-style: "solid";
     border-color: "coral";
-    border-width: 100px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    border-width: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 100;
+    width: 100;
 }
 
 .custom-footer-text {
     color: "yellow";
-    text-shadow:20px 10px 15px crimson;
+    text-shadow:5px 5px 5px rgb(0, 81, 255);
     font-size: 30px;
 }
 
 .freaky-bug {
     display: "flex";
     height: 50px;
-    box-shadow: 20px 10px 15px crimson;
+    box-shadow: 20px 10px 15px rgb(255, 17, 17);
+}
+
+.custom-metric {
+
+    width: 100;
+    max-width: 100%;
+    flex-wrap: wrap-reverse;
+}
+
+/*
+Nice CSS suggestion from Stack Overflow: 
+https://stackoverflow.com/a/58481838/32346955
+keeps the metric numbers inside the parent container, keeps the parent containers justified across the available
+screen (shifts containers to two/four rows if screen gets small enough, thanks to flex-wrap attribute)
+Oh and it looks SO GOOD
+*/
+.custom-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    max-width: 100%;
+    min-width: 200px;
+    flex-wrap: wrap; /* this will move your content to new line if there is less space */
+    /* Some extra pieces for my own enjoyment */
+    border-color:20px 10px 15px crimson;
+    border-width: 12;
+    margin-bottom: 10px;
+
+}
+
+.custom-table-col {
+    overflow: x 10px;
+    overflow: y 10px;
+    max-width: 10;
+    display: flex;
+    flex-wrap: wrap;
 }

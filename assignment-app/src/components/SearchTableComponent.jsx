@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export default function SearchTableComponent({ response }) {
 
@@ -28,7 +29,7 @@ export default function SearchTableComponent({ response }) {
                 <tbody>
                     {(response?.length > 0) && (
                         response.map(item => (
-                            <tr key={item["User ID"]}>
+                            <tr className="" key={item["User ID"]}>
                                 <td>{Intl.NumberFormat("en-US").format(item["User ID"])}</td>
                                 <td>{item["Device Model"]}</td>
                                 <td>{item["Operating System"]}</td>
@@ -47,3 +48,7 @@ export default function SearchTableComponent({ response }) {
             </table>
     );
 }
+
+SearchTableComponent.propTypes = {
+    response: PropTypes.arrayOf(PropTypes.object)
+};

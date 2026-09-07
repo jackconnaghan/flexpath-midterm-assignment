@@ -51,12 +51,12 @@ export default function SearchMetricCardsComponent({ response, loading }) {
     return (
         <div className="row d-flex justify-content-between p-1 b-5 mb-5">
             {dataAreas.map((option, index) => (
-                <div className="col-2 mx-1 py-3 flex-fill border position-relative" key={index}>
+                <div className="col-2 mx-1 py-3 custom-flex flex-fill border position-relative" key={index}>
                     <div type="card" >
                         <div className="card-title position-relative top-25 start-25">
                             <h4 className="flex-fill" style={{ textAlign: "center" }}>{option[0]}</h4>
                         </div>
-                        <div className="card-body border position-relative bottom-0 start-0 end-0">
+                        <div className="card-body border custom-metric position-relative bottom-0 start-0 end-0">
                             {
                                 (response?.length > 0)
                                     ? (
@@ -64,7 +64,7 @@ export default function SearchMetricCardsComponent({ response, loading }) {
                                             <p className="card-text" style={{ textAlign: "center" }}>Average: {Intl.NumberFormat("en-US").format(calculateAverage(option[0]))} {option[1]}</p>
                                             <p className="card-text" style={{ textAlign: "center" }}>Median: {Intl.NumberFormat("en-US").format(calculateMedian(option[0]))} {option[1]}</p>
                                         </>
-                                    ) : <p className="card-text" style={{ textAlign: "center" }}>No Average or Media to display</p>
+                                    ) : <p className="card-text" style={{ textAlign: "center" }}>No Average or Median to display</p>
                             }
                         </div>
                     </div>
