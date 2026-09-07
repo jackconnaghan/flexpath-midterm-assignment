@@ -56,7 +56,7 @@ export default function SearchMetricCardsComponent({ response, loading }) {
                         <div className="card-title position-relative top-25 start-25">
                             <h4 className="flex-fill" style={{ textAlign: "center" }}>{option[0]}</h4>
                         </div>
-                        <div className="card-body border position-sticky bottom-0 start-0 end-0">
+                        <div className="card-body border position-relative bottom-0 start-0 end-0">
                             {
                                 (response?.length > 0)
                                     ? (

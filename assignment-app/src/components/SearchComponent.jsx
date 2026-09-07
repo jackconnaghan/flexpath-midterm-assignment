@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import kOnzy from "/kOnzy.gif";
 import scaredyDog from "/scaredyDog.jpeg"
 import { useCache } from "../contexts/CacheResultsContext";
 import useFetch from "../hooks/useFetch";
@@ -37,7 +36,7 @@ export default function SearchComponent() {
             keyword: input.trim(),
         });
 
-        const baseURL = `/api/data/searjch?`;
+        const baseURL = `/api/data/search?`;
 
         fetchData(baseURL, searchParams);
         setInput("");
